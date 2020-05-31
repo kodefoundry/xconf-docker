@@ -6,7 +6,7 @@ Run 'xconf_build.sh' first, on sucessful completion of the script, two container
 
 
 |REPOSITORY           |TAG                 |IMAGE ID            |CREATED             |SIZE         |
-|                     |                    |                    |                    |             |
+|---|---|---|---|---|
 |xconf/dataservice    |latest              |xxxxxxxxxxxx        |5 minutes ago       |156MB        |
 |                     |                    |                    |                    |             |
 |xconf/adminservice   |latest              |xxxxxxxxxxxx        |5 minutes ago       |257MB        |
