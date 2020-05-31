@@ -4,11 +4,12 @@ A repository build and containerise RDK Xconf Server then deploy locally using d
 Take a look at the xconf_build.sh if you want to customise path to maven (m2) and other paths
 Run 'xconf_build.sh' first, on sucessful completion of the script, two containers as below
 
-REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE
 
-xconf/dataservice    latest              xxxxxxxxxxxx        5 minutes ago       156MB
-
-xconf/adminservice   latest              xxxxxxxxxxxx        5 minutes ago       257MB
+|REPOSITORY           |TAG                 |IMAGE ID            |CREATED             |SIZE         |
+|                     |                    |                    |                    |             |
+|xconf/dataservice    |latest              |xxxxxxxxxxxx        |5 minutes ago       |156MB        |
+|                     |                    |                    |                    |             |
+|xconf/adminservice   |latest              |xxxxxxxxxxxx        |5 minutes ago       |257MB        |
 
 
 
