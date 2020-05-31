@@ -8,7 +8,6 @@ Run 'xconf_build.sh' first, on sucessful completion of the script, two container
 |REPOSITORY           |TAG                 |IMAGE ID            |CREATED             |SIZE         |
 |---|---|---|---|---|
 |xconf/dataservice    |latest              |xxxxxxxxxxxx        |5 minutes ago       |156MB        |
-|                     |                    |                    |                    |             |
 |xconf/adminservice   |latest              |xxxxxxxxxxxx        |5 minutes ago       |257MB        |
 
 
@@ -18,17 +17,13 @@ Run 'docker-compose up' to deploy the the services which on sucessful deployment
 
 
 
-           Name                          Command                  State                        Ports
-----------------------------------------------------------------------------------------------------------------------
-
-cassandra                     docker-entrypoint.sh cassa ...   Up (healthy)   7000/tcp, 7001/tcp, 7199/tcp,
-                                                                              0.0.0.0:9042->9042/tcp, 9160/tcp
-                                                                              
-cassandra-load-keyspace       docker-entrypoint.sh /bin/ ...   Exit 0
-
-xconf-docker_adminservice_1   /docker-entrypoint.sh            Up             0.0.0.0:9093->9093/tcp
-
-xconf-docker_dataservice_1    /docker-entrypoint.sh            Up             0.0.0.0:9092->9092/tcp
+|           Name              |            Command             |     State    |             Ports
+|---|---|---|---|
+|cassandra                    |docker-entrypoint.sh cassa ...  |Up (healthy)  |7000/tcp, 7001/tcp, 7199/tcp,
+                                                                              0.0.0.0:9042->9042/tcp, 9160/tcp                                                                             
+|cassandra-load-keyspace      |docker-entrypoint.sh /bin/ ...  |Exit 0        |
+|xconf-docker_adminservice_1  |/docker-entrypoint.sh           |Up            |0.0.0.0:9093->9093/tcp
+|xconf-docker_dataservice_1   |/docker-entrypoint.sh           |Up            |0.0.0.0:9092->9092/tcp
 
 
 Run 'docker-compose down' to stop all the containers.
