@@ -101,8 +101,8 @@ RUN cd $JETTY_BASE/webapps/admin; \
     grunt install; \
     cd $JETTY_BASE/webapps/admin/WEB-INF/classes; \
     mv sample.service.properties service.properties; \
-    echo -e "\nautoGenerateSchema=true\n \
-connectionPools.SharedConnectionPool.maxConnsPerHost=15\n \
+    echo -e "\nautoGenerateSchema=true\n\
+connectionPools.SharedConnectionPool.maxConnsPerHost=15\n\
 connectionPools.SharedConnectionPool.seeds=cassandra\n" >> $JETTY_BASE/webapps/admin/WEB-INF/service.properties;
 
 #connectionPools.SharedConnectionPool.nodeDiscoveryType=RING_DESCRIBE\n \
