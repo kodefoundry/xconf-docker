@@ -1,8 +1,9 @@
 # xconf-docker
 A repository build and containerise RDK Xconf Server then deploy locally using docker-compose
 
-Take a look at the xconf_build.sh if you want to customise path to maven (m2) and other paths
-Run 'xconf_build.sh' first, on sucessful completion of the script, two containers as below
+Take a look at the xconf_build.sh if you want to customise path to maven (m2) and other paths.
+
+Run 'xconf_build.sh' first, on sucessful completion of the script, two containers will be created as below
 
 
 |REPOSITORY           |TAG                 |IMAGE ID            |CREATED             |SIZE         |
