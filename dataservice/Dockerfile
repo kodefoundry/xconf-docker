@@ -105,7 +105,7 @@ RUN chmod +x /docker-entrypoint.sh
 USER jetty
 EXPOSE 9092
 
-ENV XCONF_PROPS $JETTY_BASE/webapps/WEB-INF/classes/service.properties
+ENV XCONF_PROPS $JETTY_BASE/webapps/service/WEB-INF/service.properties
 ENV JAVA_OPTIONS "-DappConfig=$XCONF_PROPS -DserviceName=xconfDataService \
 -Xms2048m -Xmx2048m -XX:NewSize=512m -XX:MaxNewSize=512m \
 -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:+HeapDumpOnOutOfMemoryError \
