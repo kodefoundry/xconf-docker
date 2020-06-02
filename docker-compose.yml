@@ -26,15 +26,6 @@ services:
     volumes:
       - ./cassandra/resources/schema.cql:/schema.cql
     command: /bin/bash -c "echo loading cassandra keyspace && cqlsh cassandra -f /schema.cql"
-  adminservice:
-    image: xconf/adminservice
-    depends_on:
-      cassandra:
-        condition: service_healthy
-    ports: 
-      - "9093:9093"
-    environment: 
-      CASSANDRA_HOSTS: "cassandra"
   dataservice:
     image: xconf/dataservice
     depends_on: 
@@ -43,4 +34,18 @@ services:
     ports: 
       - "9092:9092"
     environment:
-      CASSANDRA_HOSTS: "cassandra"  
+      CASSANDRA_HOSTS: "cassandra"
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:9092/service/queries/models"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+  adminservice:
+    image: xconf/adminservice
+    depends_on:
+      dataservice:
+        condition: service_healthy
+    ports:
+      - "9093:9093"
+    environment:
+      CASSANDRA_HOSTS: "cassandra"

@@ -11,7 +11,7 @@ ENV JETTY_VERSION 9.4.27.v20200227
 ENV JETTY_HOME /usr/local/jetty
 ENV JETTY_BASE /var/lib/jetty
 ENV TMPDIR /tmp/jetty
-ENV LOGDIR /var/logs
+ENV LOGDIR /var/log
 ENV PATH $JETTY_HOME/bin:$PATH
 ENV JETTY_TGZ_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-home/$JETTY_VERSION/jetty-home-$JETTY_VERSION.tar.gz
 
@@ -72,7 +72,7 @@ RUN set -xe ; \
 		--add-to-start="server,http,deploy,jsp,jstl,ext,resources,websocket" ; \
 	mkdir -p "$TMPDIR" ; \
     addgroup -S jetty && adduser -S -g jetty jetty ; \
-	chown -R jetty:jetty "$JETTY_HOME" "$JETTY_BASE" "$TMPDIR"; \
+	chown -R jetty:jetty "$JETTY_HOME" "$JETTY_BASE" "$TMPDIR" "$LOGDIR"; \
 	#
 	echo Cleanup; \
 	rm -rf /tmp/hsperfdata_root ; \
