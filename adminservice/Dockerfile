@@ -3,7 +3,7 @@ FROM alpine:3.11
 LABEL author="biju.nair@ltts.com"
 LABEL maintainer="L&T Technology Services"
 
-RUN apk upgrade --update && apk add --no-cache nodejs npm openjdk8-jre curl gnupg && rm -rf /var/apk/*
+RUN apk upgrade --update && apk add --no-cache nodejs npm openjdk8-jre curl gnupg git && rm -rf /var/apk/*
 
 # Installing Jetty
 ENV JAVA_HOME /usr/lib/jvm/default-jvm
@@ -12,8 +12,20 @@ ENV JETTY_HOME /usr/local/jetty
 ENV JETTY_BASE /var/lib/jetty
 ENV TMPDIR /tmp/jetty
 ENV LOGDIR /var/log
-ENV PATH $JETTY_HOME/bin:$PATH
+ENV PATH $JAVA_HOME/bin:$JETTY_HOME/bin:$JAVA_HOME/db/bin:$PATH
 ENV JETTY_TGZ_URL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-home/$JETTY_VERSION/jetty-home-$JETTY_VERSION.tar.gz
+
+ENV J2SDKDIR $JAVA_HOME
+ENV J2REDIR $JAVA_HOME
+ENV DERBY_HOME $JAVA_HOME/db
+
+
+#	export J2SDKDIR=/usr/lib/jvm/ jdk-1.8.0
+#	export J2REDIR=/usr/lib/jvm/ jdk-1.8.0
+#	export PATH=$PATH:/usr/lib/jvm/java-jdk-1.8.0/bin:/usr/lib/jvm/java-jdk-1.8.0/db/bin
+#	export JAVA_HOME=/usr/lib/jvm/java-jdk-1.8.0
+#	export DERBY_HOME=/usr/lib/jvm/java-jdk-1.8.0/db
+
 
 ENV JAVA_OPTIONS "-DappConfig=$XCONF_PROPS -DserviceName=xconfAngularUIService \
 -Xms2048m -Xmx2048m -XX:NewSize=512m -XX:MaxNewSize=512m \
@@ -78,8 +90,8 @@ RUN set -xe ; \
 	java -jar "$JETTY_HOME/start.jar" --create-startd \
 		--add-to-start="server,http,deploy,jsp,jstl,ext,resources,websocket" ; \
 	mkdir -p "$TMPDIR" ; \
-    addgroup -S jetty && adduser -S -g jetty jetty ; \
-	chown -R jetty:jetty "$JETTY_HOME" "$JETTY_BASE" "$TMPDIR" "$LOGDIR"; \
+    #addgroup -S jetty && adduser -S -g jetty jetty ; \
+	#chown -R jetty:jetty "$JETTY_HOME" "$JETTY_BASE" "$TMPDIR" "$LOGDIR"; \
 	#
 	echo Cleanup; \
 	rm -rf /tmp/hsperfdata_root ; \
@@ -98,7 +110,8 @@ RUN cd $JETTY_BASE/webapps/admin; \
     npm install -g grunt-cli; \
     npm install; \
     npm install grunt-contrib-copy --save-den; \
-    grunt install; \
+	bower --allow-root install; \
+	grunt install; \
     cd $JETTY_BASE/webapps/admin/WEB-INF/classes; \
     mv sample.service.properties service.properties; \
     echo -e "\nautoGenerateSchema=true\n\
@@ -113,7 +126,9 @@ connectionPools.SharedConnectionPool.seeds=cassandra\n" >> $JETTY_BASE/webapps/a
 
 WORKDIR $JETTY_BASE
 COPY docker-entrypoint.sh generate-jetty-start.sh /
-RUN chmod +x /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh; \
+	addgroup -S jetty && adduser -S -g jetty jetty; \
+	chown -R jetty:jetty "$JETTY_HOME" "$JETTY_BASE" "$TMPDIR" "$LOGDIR";
 USER jetty
 EXPOSE 9093
 
