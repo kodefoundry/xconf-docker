@@ -1,0 +1,21 @@
+FROM jetty:9.3.12-alpine
+
+ENV CASSANDRA cassandra
+ENV XCONF_PROPS $JETTY_BASE/webapps/admin/WEB-INF/service.properties
+
+ENV JAVA_OPTIONS "-DappConfig=$XCONF_PROPS -DserviceName=xconfUIService \
+-Xms2048m -Xmx2048m -XX:NewSize=512m -XX:MaxNewSize=512m \
+-XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:+HeapDumpOnOutOfMemoryError \
+-XX:HeapDumpPath=$LOGDIR/xconfUIService.heapDump -XX:OnOutOfMemoryError=$LOGDIR/oom/OOM.rb \
+-Djetty.logs=$LOGDIR/jetty -Djava.io.tmpdir=$TMPDIR -DENABLE_OBIEE_SCP_URL_PROP=false \
+-Dtheplatform.log.dir=$LOGDIR/platform -Djava.library.path=$JAVA_HOME/jre/lib/ext \
+-DSTOP.PORT=9083 -Djetty.port=9093"
+
+COPY ./webapp $JETTY_BASE/webapps/admin
+COPY ./entrypoint.sh /
+
+RUN apk upgrade --update && apk add --no-cache nodejs && rm -rf /var/cache/apk/* && chmod +x /entrypoint.sh
+
+EXPOSE 9093
+
+ENTRYPOINT ["/entrypoint.sh"]
