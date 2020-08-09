@@ -1,0 +1,30 @@
+From maven:3.5-jdk-8-alpine
+
+RUN apk upgrade --update && apk add --no-cache git nodejs npm
+
+ENV MAVEN_PROXY -DproxySet=true -Dhttp.proxyHost=$MAVEN_PROXY_HOST -Dhttp.proxyPort=$MAVEN_PROXY_PORT -Dhttps.proxyHost=$MAVEN_PROXY_HOST -Dhttps.proxyPort=$MAVEN_PROXY_PORT -Dhttp.nonProxyHosts=mvnrepository.com 
+
+ENV MAVEN_CLI_OPTS -Dmaven.test.skip=true
+
+#VOLUME [ "/artifacts", "/root/.m2" ]
+RUN mkdir /artifacts
+ENTRYPOINT  git clone "https://code.rdkcentral.com/r/rdk/components/generic/xconfserver" \
+&& cd xconfserver \
+&& mvn $MAVEN_CLI_OPTS clean package \
+&& cp ./xconf-angular-admin/src/main/webapp/*.json ./xconf-angular-admin/target/xconfAdminService2 \
+&& cp ./xconf-angular-admin/src/main/webapp/Gruntfile.js ./xconf-angular-admin/target/xconfAdminService2 \
+&& cd ./xconf-angular-admin/target/xconfAdminService2 \
+&& npm install -g bower \
+&& npm install -g grunt-cli \
+&& npm install \
+&& npm install grunt-contrib-copy --save-den \
+&& bower --allow-root install \
+&& grunt install \
+&& mv WEB-INF/classes/sample.service.properties WEB-INF/service.properties \
+&& echo -e "\nautoGenerateSchema=true\n\
+    connectionPools.SharedConnectionPool.maxConnsPerHost=15\n\
+    connectionPools.SharedConnectionPool.seeds=\$CASSANDRA\n" >> WEB-INF/service.properties \
+&& cd ../../../ \
+&& cp -r ./xconf-angular-admin/target/xconfAdminService2 /artifacts/adminservice \
+&& cp -r ./xconf-dataservice/target/xconf-dataservice /artifacts/dataservice
+#&& /bin/sh
